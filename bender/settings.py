@@ -135,4 +135,13 @@ LOGGING = {
         'handlers': ['console'],
         'level': 'INFO',
     },
+    'loggers': {
+        'app.fsm': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+        },
+        'app.motors.AxisMotor': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+        }
 }
