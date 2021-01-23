@@ -1,4 +1,4 @@
-from django.urls import Path
+from django.urls import path
 from app.views import awaken, drink_selected
 
 urlpatterns = [
