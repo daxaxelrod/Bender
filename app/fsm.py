@@ -4,6 +4,7 @@ import time
 from playsound import playsound
 from app.motors.AxisMotor import AxisMotor
 from constants.fsm import states, transitions
+from collections import Counter
 from app.models import Drink, Resevoir
 
 logger = logging.getLogger(__name__)
@@ -70,3 +71,43 @@ class DrinkManufacturer(object):
 
     def on_exit_preparing(self, drink: Drink):
         playsound(drink.ending_sound)
+
+    POUR_SLEEP_TIME = 300
+    def execute_pour(self, pour_map):
+        # GPIO.setmode(GPIO.BCM)
+
+        pins_switched_off = [] # verification that all pins were turned off
+        start_time = time.time_ns() * 1000
+        # turn on all the pins, progressively turn them off based on the pour duration
+        for pin in pour_map.keys():
+            pass
+            # GPIO.setup(pin, GPIO.OUT)
+            # GPIO.output(GPIO_PIN, GPIO.HIGH)
+        
+        timeout = 20000
+        while self.is_pour_still_valid(pour_map, start_time, pin, timeout):
+            time.sleep(self.POUR_SLEEP_TIME)
+            # check if any pins overstayed their welcome. shut them off
+            now = time.time_ns() * 1000
+            for pin, duration in pour_map.items():
+                if now > start_time + duration:
+                    # GPIO.output(GPIO_PIN, GPIO.LOW)
+                    pins_switched_off.append(pin)
+                    pass
+        
+        # sanity check
+        requested_pins = pour_map.keys()
+        if len(pins_switched_off) != len(requested_pins):
+            pins = Counter(requested_pins)
+            off = Counter(pins_switched_off)
+            left_on = (pins - off).elements()
+            for err in left_on:
+                pass
+                # GPIO.output(GPIO_PIN, GPIO.LOW)
+            logger.error("a pin has not been turned off!") 
+        
+        logger.info("Pour complete!")
+
+    
+    def is_pour_still_valid(self, pour_map, start_time, pin, timeout):
+        return (any(time.time_ns() * 1000 < start_time + duration for pin, duration in pour_map.items()) or time.time_ns() * 1000 < start_time + timeout) 
