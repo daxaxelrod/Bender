@@ -1,10 +1,12 @@
 import time
+import logging
 from app.constants.fsm import transitions, states
 from .fsm import DrinkManufacturerFSM
 from transitions import Machine
 from app.models import Drink
 from transitions.extensions.states import add_state_features, Timeout
 
+logger = logging.getLogger(__name__)
 
 @add_state_features(Timeout)
 class TimeoutEnabledMachine(Machine):
@@ -14,16 +16,14 @@ class TimeoutEnabledMachine(Machine):
 class DrinkManufacturer(object):
 
     def __init__(self):
-        self.model = DrinkManufacturerFSM()
-        self.machine = TimeoutEnabledMachine(model=self.model, states=states, transitions=transitions, initial='idle')
+        self.drink_maker = DrinkManufacturerFSM()
+        self.machine = TimeoutEnabledMachine(model=self.drink_maker, states=states, transitions=transitions, initial='idle')
+        logger.info(f"Machine state: {self.drink_maker.state}" )
 
     def awaken(self):
-        self.machine.wake()
-
-        # if after 2 minutes no selection has been made, revert back to idle
-        
+        self.drink_maker.wake()
 
     def on_drink_selection(self, drink: Drink):
-        self.machine.prepare_drink(drink)
-        self.machine.present()
-        self.machine.reset()
+        self.drink_maker.prepare_drink(drink)
+        self.drink_maker.present()
+        self.drink_maker.reset()

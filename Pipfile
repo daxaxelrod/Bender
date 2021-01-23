@@ -11,6 +11,8 @@ django = "*"
 transitions = "*"
 djangorestframework = "*"
 playsound = "*"
+gunicorn = "*"
+"rpi.gpio" = "*"
 
 [requires]
 python_version = "3.8"

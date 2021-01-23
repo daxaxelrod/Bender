@@ -3,7 +3,7 @@ from pprint import pformat
 import time
 from playsound import playsound
 from app.motors.AxisMotor import AxisMotor
-from constants.fsm import states, transitions
+from app.constants.fsm import states, transitions
 from collections import Counter
 from app.models import Drink, Resevoir
 
@@ -18,22 +18,26 @@ logger = logging.getLogger(__name__)
 
 class DrinkManufacturerFSM(object):
     
-    #GLOBAL
     def set_global_direction(self, value: bool):
-        # GPIO.output(self.global_direction_pin, GPIO.HIGH)
+        if value:
+            pin_value = GPIO.HIGH
+        else:
+            pin_value = GPIO.LOW
+            
+        GPIO.output(self.global_direction_pin, pin_value)
         self.MOTOR_DIRECTION = value
 
     def __init__(self):
-        self.global_direction_pin = 31
-        # GPIO.setmode(GPIO.BCM)
-        # GPIO.setup(global_direction_pin, GPIO.OUT)
+        self.global_direction_pin = 26
+        GPIO.setmode(GPIO.BOARD)
+        GPIO.setup(global_direction_pin, GPIO.OUT)
         self.set_global_direction(True)
         
 
         # initialize screw motors
-        self.horizontal_patter_motor = AxisMotor(3, [24, 25])
-        self.shaker_motor = AxisMotor(4, [18, 19, 20])
-        self.vertical_platter_motor = AxisMotor(5, [16, 17])
+        self.horizontal_patter_motor = AxisMotor(21, [24, 25])
+        self.shaker_motor = AxisMotor(20, [18, 19, 20])
+        self.vertical_platter_motor = AxisMotor(16, [16, 17])
 
         # and the pump motors
         # resevoirs
@@ -43,16 +47,16 @@ class DrinkManufacturerFSM(object):
 
 
     def on_enter_idle(self):
-        print("entering idle")
+        logger.info("entering idle")
 
     def on_exit_idle(self):
-        print("exiting idle, user selecting their drink")
+        logger.info("exiting idle")
         
     def on_enter_selecting(self):
         self.horizontal_patter_motor.drive()
 
     def on_exit_selecting(self):
-        print("drink selected")
+        logger.info("Exiting selecting selected")
         self.set_global_direction(False)
         self.horizontal_patter_motor.drive()
         self.set_global_direction(True)

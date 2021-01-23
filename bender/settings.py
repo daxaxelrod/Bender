@@ -143,5 +143,10 @@ LOGGING = {
         'app.motors.AxisMotor': {
             'handlers': ['console'],
             'level': 'DEBUG',
+        },
+        'app.machine': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
         }
+    }
 }

@@ -20,7 +20,7 @@ class Ingredient(models.Model):
     name = models.CharField(max_length=60)
     is_alcohol = models.BooleanField(default=True)
     cost = models.CharField(choices=COST_CHOICES, max_length=4)
-    resevoir = models.ForeignKey(Resevoir, related_name="ingredients", on_delete=models.SET_NULL, null=True, blank=True, unique=True)
+    resevoir = models.OneToOneField(Resevoir, related_name="ingredients", on_delete=models.SET_NULL, null=True, blank=True)
     
     def __str__(self):
         if self.resevoir is not None:
