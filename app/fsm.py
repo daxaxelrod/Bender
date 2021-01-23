@@ -24,7 +24,7 @@ class DrinkManufacturer(object):
         self.MOTOR_DIRECTION = value
 
     def __init__(self):
-        global_direction_pin = 31
+        self.global_direction_pin = 31
         # GPIO.setmode(GPIO.BCM)
         # GPIO.setup(global_direction_pin, GPIO.OUT)
         self.set_global_direction(True)
@@ -36,7 +36,7 @@ class DrinkManufacturer(object):
         self.vertical_platter_motor = AxisMotor(5, [16, 17])
 
         # and the pump motors
-        resevoirs
+        # resevoirs
 
 
     def on_enter_idle(self):
@@ -54,9 +54,18 @@ class DrinkManufacturer(object):
         self.horizontal_patter_motor.drive()
         self.set_global_direction(True)
 
+    def is_drink_unavailable(self, drink: Drink):
+        # condition required to enter preparing state
+        unavailable = drink.instructions.all().filter(ingredient__resevoir__isnull=True)
+        result = unavailable.exists()
+        if result:
+            missing_ingredients = [x.ingredient.name for x in unavailable]
+            logger.warn(f"Unable to make drink, ${drink.name}. Ingredients missing: {*missing_ingredients, }")
+        return result
+
     def on_enter_preparing(self, drink: Drink):
         playsound(drink.start_sound)
-    
+ 
         # actually prepare the drinks
         instructions = drink.instructions.all()
 
