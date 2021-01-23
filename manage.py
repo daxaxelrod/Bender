@@ -2,7 +2,7 @@
 """Django's command-line utility for administrative tasks."""
 import os
 import sys
-
+import RPi.GPIO as GPIO
 
 def main():
     """Run administrative tasks."""
@@ -19,4 +19,11 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    try:
+        main()
+    except KeyboardInterrupt:
+        GPIO.cleanup()
+        try:
+            sys.exit(0)
+        except SystemExit:
+            os._exit(0)
