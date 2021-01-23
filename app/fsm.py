@@ -49,7 +49,7 @@ class DrinkManufacturerFSM(object):
         print("exiting idle, user selecting their drink")
         
     def on_enter_selecting(self):
-        self.vertical_platter_motor.drive()
+        self.horizontal_patter_motor.drive()
 
     def on_exit_selecting(self):
         print("drink selected")
@@ -130,3 +130,7 @@ class DrinkManufacturerFSM(object):
         while not GPIO.input(self.drink_presentation_switch):
             time.sleep(1)
         logger.info("presenting drink")
+    
+    def on_exit_presenting(self):
+        self.set_global_direction(False)
+        self.vertical_platter_motor.drive()
