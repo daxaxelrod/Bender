@@ -16,7 +16,7 @@ logger = logging.getLogger(__name__)
     and IN the database table 'resevoir'
 """
 
-class DrinkManufacturer(object):
+class DrinkManufacturerFSM(object):
     
     #GLOBAL
     def set_global_direction(self, value: bool):
@@ -37,6 +37,9 @@ class DrinkManufacturer(object):
 
         # and the pump motors
         # resevoirs
+
+        # setup miscellanious switches
+        self.drink_presentation_switch = 28 # GPIO pin #
 
 
     def on_enter_idle(self):
@@ -111,12 +114,19 @@ class DrinkManufacturer(object):
             off = Counter(pins_switched_off)
             left_on = (pins - off).elements()
             for err in left_on:
-                pass
+                logger.error(f"DRINK PIN LEFT ON: {err}")
                 # GPIO.output(GPIO_PIN, GPIO.LOW)
-            logger.error("a pin has not been turned off!") 
-        
+                pass
         logger.info("Pour complete!")
+
 
     
     def is_pour_still_valid(self, pour_map, start_time, pin, timeout):
         return (any(time.time_ns() * 1000 < start_time + duration for pin, duration in pour_map.items()) or time.time_ns() * 1000 < start_time + timeout) 
+
+    def on_enter_presenting(self):
+        # drink is assumed complete
+        self.vertical_platter_motor.drive()
+        while not GPIO.input(self.drink_presentation_switch):
+            time.sleep(1)
+        logger.info("presenting drink")

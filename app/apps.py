@@ -1,8 +1,11 @@
 from django.apps import AppConfig
+from machine import DrinkManufacturer
 
+# the object that the view functions act on
+machine = DrinkManufacturer()
 
-class AppConfig(AppConfig):
+class Conf(AppConfig):
     name = 'app'
 
-    def ready(self):
-        from fsm import Machine
+        
+        
