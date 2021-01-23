@@ -1,10 +1,14 @@
 from django.db import models
+from django.core.validators import MaxValueValidator, MinValueValidator
 
 
 class Resevoir(models.Model):
     capacity = models.FloatField(default=16, help_text="In fluid ounces")
-    level = models.FloatField(default=80.00, help_text="In percentage")
-    motor_number = models.IntegerField(unique=True)
+    level = models.FloatField(default=80.00, help_text="In percentage", validators=[
+            MaxValueValidator(100),
+            MinValueValidator(1)
+        ])
+    gpio_pin = models.IntegerField(unique=True)
 
 class Ingredient(models.Model):
     COST_CHOICES = [
@@ -16,15 +20,20 @@ class Ingredient(models.Model):
     name = models.CharField(max_length=60)
     is_alcohol = models.BooleanField(default=True)
     cost = models.CharField(choices=COST_CHOICES, max_length=4)
-    resevoir = models.ForeignKey(Resevoir, related_name="ingredients", on_delete=models.SET_NULL, null=True, blank=True)
+    resevoir = models.ForeignKey(Resevoir, related_name="ingredients", on_delete=models.SET_NULL, null=True, blank=True, unique=True)
     
     def __str__(self):
+        if self.resevoir is not None:
+            return f"{self.name} - Sitting in resevoir #{self.resevoir.pk}"
         return f"{self.name}"
 
 class Drink(models.Model):
     name = models.CharField(max_length=140)
-    start_sound = models.FileField(upload_to="audio")
-    ending_sound = models.FileField(upload_to="audio")
+    start_sound = models.FileField(upload_to="audio", null=True, blank=True)
+    ending_sound = models.FileField(upload_to="audio", null=True, blank=True)
+
+    def __str__(self):
+        return self.name
 
 
 class Instruction(models.Model):
