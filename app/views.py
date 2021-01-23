@@ -8,8 +8,6 @@ import RPi.GPIO as GPIO
 from app.machine import DrinkManufacturer
 
 # the object that the view functions act on
-
-GPIO.cleanup()
 machine = DrinkManufacturer()
 
 

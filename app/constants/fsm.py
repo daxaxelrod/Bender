@@ -2,7 +2,7 @@ states = [
     "idle",
      {'name': 'selecting', 'timeout': 120, 'on_timeout': "sleep"},
     "preparing",
-    "presenting",
+    {'name': "presenting", 'timeout': 180, 'on_timeout': 'reset'},
 ]
 
 transitions = [

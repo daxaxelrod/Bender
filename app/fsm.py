@@ -29,22 +29,24 @@ class DrinkManufacturerFSM(object):
         self.MOTOR_DIRECTION = value
 
     def __init__(self):
-        self.global_direction_pin = 26
+        self.global_direction_pin = 2
         GPIO.setmode(GPIO.BCM)
         GPIO.setup(self.global_direction_pin, GPIO.OUT)
         self.set_global_direction(True)
         
 
         # initialize screw motors
-        self.horizontal_patter_motor = AxisMotor(21, [24, 25])
-        self.shaker_motor = AxisMotor(20, [18, 19, 20])
-        self.vertical_platter_motor = AxisMotor(16, [16, 17])
+        self.horizontal_patter_motor = AxisMotor(4, [14, 15])
+        self.shaker_motor = AxisMotor(4, [18, 23, 24])
+        self.vertical_platter_motor = AxisMotor(27, [25, 8])
 
-        # and the pump motors
-        # resevoirs
+        # pump motors are setup in execute pour
+        # enabling them to be modified between runs
+        
+        
 
         # setup miscellanious switches
-        self.drink_presentation_switch = 28 # GPIO pin #
+        self.drink_presentation_switch = 6
 
 
     def on_enter_idle(self):
@@ -96,24 +98,22 @@ class DrinkManufacturerFSM(object):
 
     POUR_SLEEP_TIME = 300
     def execute_pour(self, pour_map):
-        # GPIO.setmode(GPIO.BCM)
 
         pins_switched_off = [] # verification that all pins were turned off
         start_time = time.time_ns() * 1000
         # turn on all the pins, progressively turn them off based on the pour duration
         for pin in pour_map.keys():
-            pass
-            # GPIO.setup(pin, GPIO.OUT)
-            # GPIO.output(GPIO_PIN, GPIO.HIGH)
+            GPIO.setup(pin, GPIO.OUT)
+            GPIO.output(pin, GPIO.HIGH)
         
-        timeout = 20000
+        timeout = 5000
         while self.is_pour_still_valid(pour_map, start_time, pin, timeout):
             time.sleep(self.POUR_SLEEP_TIME)
             # check if any pins overstayed their welcome. shut them off
             now = time.time_ns() * 1000
             for pin, duration in pour_map.items():
                 if now > start_time + duration:
-                    # GPIO.output(GPIO_PIN, GPIO.LOW)
+                    GPIO.output(pin, GPIO.LOW)
                     pins_switched_off.append(pin)
                     pass
         
@@ -125,7 +125,7 @@ class DrinkManufacturerFSM(object):
             left_on = (pins - off).elements()
             for err in left_on:
                 logger.error(f"DRINK PIN LEFT ON: {err}")
-                # GPIO.output(GPIO_PIN, GPIO.LOW)
+                GPIO.output(err, GPIO.LOW)
                 pass
         logger.info("Pour complete!")
 
