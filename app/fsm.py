@@ -68,6 +68,7 @@ class DrinkManufacturerFSM(object):
 
     def on_enter_preparing(self, drink: Drink):
         playsound(drink.start_sound)
+        self.shaker_motor.drive()
  
         # actually prepare the drinks
         instructions = drink.instructions.all()
@@ -83,6 +84,10 @@ class DrinkManufacturerFSM(object):
 
     def on_exit_preparing(self, drink: Drink):
         playsound(drink.ending_sound)
+        # move the shaker back
+        self.set_global_direction(False)
+        self.shaker_motor.drive()
+        self.set_global_direction(True)
 
     POUR_SLEEP_TIME = 300
     def execute_pour(self, pour_map):
