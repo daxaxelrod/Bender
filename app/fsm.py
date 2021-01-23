@@ -1,6 +1,7 @@
 import logging
 from pprint import pformat
 import time
+import RPi.GPIO as GPIO
 from playsound import playsound
 from app.motors.AxisMotor import AxisMotor
 from app.constants.fsm import states, transitions
@@ -29,8 +30,8 @@ class DrinkManufacturerFSM(object):
 
     def __init__(self):
         self.global_direction_pin = 26
-        GPIO.setmode(GPIO.BOARD)
-        GPIO.setup(global_direction_pin, GPIO.OUT)
+        GPIO.setmode(GPIO.BCM)
+        GPIO.setup(self.global_direction_pin, GPIO.OUT)
         self.set_global_direction(True)
         
 

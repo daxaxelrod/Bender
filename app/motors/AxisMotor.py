@@ -10,8 +10,7 @@ class AxisMotor:
         self.signal_pin = gpio_pin_number
         self.logger = logging.getLogger(__name__)
         self.logger.prepend = f"_GPIO-pin#{gpio_pin_number}"
-        GPIO.setmode(GPIO.BOARD)
-        GPIO.setup(GPIO_PIN, GPIO.OUT)
+        GPIO.setup(self.signal_pin, GPIO.OUT)
         self.stop_switches = stop_switches # order matters
 
     def get_log_msg(self, msg):
@@ -22,7 +21,7 @@ class AxisMotor:
 
     def any_stop_switches_hit(self):
         for switch in self.stop_switches:
-            pass
+            time.sleep(2)
             # if GPIO.input(switch):
             #     return True
         return False
@@ -35,7 +34,8 @@ class AxisMotor:
             while not any_stop_switches_hit() or get_time_millis() < timeout:
                 time.sleep(SLEEP_INTERVAL)
             # GPIO.output(GPIO_PIN, GPIO.LOW)
-        except:
+        except Exception:
+            import pdb; pdb.set_trace()
             pass
             # GPIO.output(GPIO_PIN, GPIO.LOW)
         self.logger.debug(self.get_log_msg("Stoping!"))
