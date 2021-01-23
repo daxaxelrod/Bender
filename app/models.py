@@ -28,8 +28,8 @@ class Instruction(models.Model):
 class Drink(models.Model):
     name = models.CharField(max_length=140)
     ingredients = models.ManyToManyField(Ingredient)
-    start_sound = models.FileField(upload_to="/audio")
-    ending_sound = models.FileField(upload_to="/audio")
+    start_sound = models.FileField(upload_to="audio")
+    ending_sound = models.FileField(upload_to="audio")
     
 
 class DrinkCreationRecord(models.Model):
