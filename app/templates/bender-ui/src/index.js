@@ -6,7 +6,7 @@ import Selection from './components/Selection';
 import Enjoy from './components/Enjoy';
 import {
   BrowserRouter as Router,
-  Switch, Route, Link } from "react-router-dom";
+  Switch, Route } from "react-router-dom";
 
 
 ReactDOM.render(
