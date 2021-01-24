@@ -13,13 +13,13 @@ ReactDOM.render(
   <React.StrictMode>    
     <Router>
         <Switch>
-          <Route path="/finished">
+          <Route path="/finished" exact>
             <Enjoy />
           </Route>
-          <Route path="/drinks">
+          <Route path="/drinks" exact>
             <Selection />
           </Route>
-          <Route path="/">
+          <Route path="/" exact>
             <Welcome />
           </Route>
         </Switch>

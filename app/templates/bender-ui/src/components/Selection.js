@@ -1,22 +1,27 @@
 import React, { useEffect, useState } from 'react'
 import { useHistory } from "react-router-dom";
+import { DOMAIN } from '../conf';
 
 export default function Selection() {
 
     let [drinks, setDrinks] = useState([])
     const history = useHistory();
+    let resourceUrl = DOMAIN + "/drinks/"
 
     useEffect(() => {
-        fetch("localhost:8000/selection").then((response) => {
-            setDrinks(response.json())
-        }).catch(() => {
-	    console.log("could not get drink selection! Aborting")
+        fetch(resourceUrl).then((response) => {
+           return response.json() 
+        }).then((data) => {
+            console.log("data from drinks api", data);
+            setDrinks(data)
+        }).catch((err) => {
+	    console.log("could not get drink selection! Aborting", err, err.response)
 	    history.push("/")
 	})
-    }, [])
+    }, [history, resourceUrl])
 
     const selectDrink = (drink) => {
-        fetch('https://api.github.com/gists', {
+        fetch(resourceUrl, {
             method: 'post',
             body: JSON.stringify({
                 drink_id: drink.id

@@ -1,15 +1,16 @@
 import React from 'react'
-import { useHistory } from 'react-router-dom'
+import { useHistory } from 'react-router-dom';
+import { DOMAIN } from '../conf';
 
 export default function Welcome() {
 
     const history = useHistory()
 
     const wake = () => {
-      fetch("localhost:8000", {
+      fetch(DOMAIN + "/wake/", {
           method: "POST",
       }).then((response) => {
-        history.push("selection")
+        history.push("drinks")
       }).catch((err) => {
         console.log("issue waking machine") 
       })
