@@ -12,6 +12,8 @@ transitions = "*"
 djangorestframework = "*"
 gunicorn = "*"
 "rpi.gpio" = "*"
+pygame = "*"
+django-cors-headers = "*"
 
 [requires]
 python_version = "3.7"
