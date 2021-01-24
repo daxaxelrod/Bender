@@ -1,7 +1,7 @@
 from django.urls import path
-from app.views import awaken, drink_selected
+from app.views import awaken, drinks
 
 urlpatterns = [
     path("wake/", awaken),
-    path("selection/", drink_selected)
+    path("drinks/", drinks)
 ]

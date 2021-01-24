@@ -2,13 +2,14 @@ import logging
 from pprint import pformat
 import time
 import RPi.GPIO as GPIO
-from playsound import playsound
+# from pygame import mixer
 from app.motors.AxisMotor import AxisMotor
 from app.constants.fsm import states, transitions
 from collections import Counter
 from app.models import Drink, Resevoir
 
 logger = logging.getLogger(__name__)
+# mixer.init()
 
 """
     There are two places for setting GPIO pin numbers
@@ -36,7 +37,7 @@ class DrinkManufacturerFSM(object):
         
 
         # initialize screw motors
-        self.horizontal_patter_motor = AxisMotor(4, [14, 15])
+        self.horizontal_patter_motor = AxisMotor(6, [14, 15])
         self.shaker_motor = AxisMotor(17, [18, 24])
         self.vertical_platter_motor = AxisMotor(27, [25, 8])
 
@@ -46,6 +47,7 @@ class DrinkManufacturerFSM(object):
 
         # setup miscellanious switches
         self.drink_presentation_switch = 13
+        GPIO.setup(self.drink_presentation_switch, GPIO.IN)
 
 
     def on_enter_idle(self):
@@ -55,13 +57,27 @@ class DrinkManufacturerFSM(object):
         logger.info("exiting idle")
         
     def on_enter_selecting(self):
+        logger.info("moving platter outward")
         self.horizontal_patter_motor.drive()
 
-    def on_exit_selecting(self):
+    def on_exit_selecting(self, *args):
         logger.info("Exiting selecting selected")
+        
         self.set_global_direction(False)
         self.horizontal_patter_motor.drive()
         self.set_global_direction(True)
+        
+    def wait_until_cup_provided_to_machine(self, *args):
+        # condition required to enter preparing state
+        # no timeout here, a risk
+        while GPIO.input(self.drink_presentation_switch) == 0:
+            logger.info("Waiting for drink to be placed on the platter")
+            time.sleep(1)
+        
+        time.sleep(2)
+        # playsounds "thank you"
+        logger.info("Drink glass detected")
+        return True
 
     def is_drink_unavailable(self, drink: Drink):
         # condition required to enter preparing state
@@ -73,7 +89,9 @@ class DrinkManufacturerFSM(object):
         return result
 
     def on_enter_preparing(self, drink: Drink):
-        playsound(drink.start_sound)
+        #if drink.start_sound:
+        #    mixer.music.load(drink.start_sound)
+        #    mixer.music.play()
         self.shaker_motor.drive()
  
         # actually prepare the drinks
@@ -83,33 +101,36 @@ class DrinkManufacturerFSM(object):
         pour_map = {}
         for instruction in instructions:
             ingredient = instruction.ingredient
-            pour_map[ingredient.resevoir.gpio_pin] = instruction.pour_duration
+            pour_map[ingredient.resevoir.gpio_pin] = (instruction.pour_duration / 1000)
         logger.info(pformat(pour_map))
 
         self.execute_pour(pour_map)
 
     def on_exit_preparing(self, drink: Drink):
-        playsound(drink.ending_sound)
+        #if drink.end_sound:
+        #    mixer.music.load(drink.end_sound)
+        #    mixer.music.play()
+        
         # move the shaker back
         self.set_global_direction(False)
         self.shaker_motor.drive()
         self.set_global_direction(True)
 
-    POUR_SLEEP_TIME = 300
+    POUR_SLEEP_TIME = 0.3
     def execute_pour(self, pour_map):
 
         pins_switched_off = [] # verification that all pins were turned off
-        start_time = time.time_ns() * 1000
+        start_time = time.time()
         # turn on all the pins, progressively turn them off based on the pour duration
         for pin in pour_map.keys():
             GPIO.setup(pin, GPIO.OUT)
             GPIO.output(pin, GPIO.HIGH)
         
-        timeout = 5000
+        timeout = 5
         while self.is_pour_still_valid(pour_map, start_time, pin, timeout):
             time.sleep(self.POUR_SLEEP_TIME)
             # check if any pins overstayed their welcome. shut them off
-            now = time.time_ns() * 1000
+            now = time.time()
             for pin, duration in pour_map.items():
                 if now > start_time + duration:
                     GPIO.output(pin, GPIO.LOW)
@@ -129,9 +150,8 @@ class DrinkManufacturerFSM(object):
         logger.info("Pour complete!")
 
 
-    
     def is_pour_still_valid(self, pour_map, start_time, pin, timeout):
-        return (any(time.time_ns() * 1000 < start_time + duration for pin, duration in pour_map.items()) or time.time_ns() * 1000 < start_time + timeout) 
+        return (any(time.time() < start_time + duration for pin, duration in pour_map.items()) or time.time() < start_time + timeout) 
 
     def on_enter_presenting(self):
         # drink is assumed complete
