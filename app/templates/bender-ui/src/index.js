@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
+import './App.css';
 import Welcome from './components/Welcome';
 import Selection from './components/Selection';
 import Enjoy from './components/Enjoy';
@@ -10,10 +10,8 @@ import {
 
 
 ReactDOM.render(
-  <React.StrictMode>
-    
+  <React.StrictMode>    
     <Router>
-      
         <Switch>
           <Route path="/finished">
             <Enjoy />

@@ -57,7 +57,7 @@ ROOT_URLCONF = 'bender.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': ["templates"],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -131,10 +131,7 @@ LOGGING = {
             'class': 'logging.StreamHandler',
         },
     },
-    'root': {
-        'handlers': ['console'],
-        'level': 'INFO',
-    },
+    
     'loggers': {
         'app.fsm': {
             'handlers': ['console'],

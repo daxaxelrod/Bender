@@ -9,7 +9,10 @@ export default function Selection() {
     useEffect(() => {
         fetch("localhost:8000/selection").then((response) => {
             setDrinks(response.json())
-        })
+        }).catch(() => {
+	    console.log("could not get drink selection! Aborting")
+	    history.push("/")
+	})
     }, [])
 
     const selectDrink = (drink) => {

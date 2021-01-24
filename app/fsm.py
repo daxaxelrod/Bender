@@ -160,6 +160,8 @@ class DrinkManufacturerFSM(object):
     def on_enter_presenting(self):
         # drink is assumed complete
         self.vertical_platter_motor.drive()
+        #FIXME
+        import pdb; pdb.set_trace()
         while GPIO.input(self.drink_presentation_switch):
             time.sleep(1)
         logger.info("presenting drink")

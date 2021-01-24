@@ -19,4 +19,5 @@ db.sqlite3
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-app/templates/bender-ui/.eslintcache
+
+/app/templates/bender-ui/.eslintcache

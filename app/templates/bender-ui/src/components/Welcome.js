@@ -19,7 +19,7 @@ export default function Welcome() {
     return (
         <div>
             <h1>Bender</h1>
-            <div onClick={wake}>
+            <div className="btn" onClick={wake}>
                 <h2>Start</h2>
             </div>
         </div>
