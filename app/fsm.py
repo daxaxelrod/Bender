@@ -21,6 +21,10 @@ logger = logging.getLogger(__name__)
 class DrinkManufacturerFSM(object):
     
     def set_global_direction(self, value: bool):
+        # take a second to reverse polarity.
+        # We dont want a motor acting as a genorator for a second due to inertial 
+        time.sleep(1)
+        
         if value:
             pin_value = GPIO.HIGH
         else:
@@ -156,10 +160,11 @@ class DrinkManufacturerFSM(object):
     def on_enter_presenting(self):
         # drink is assumed complete
         self.vertical_platter_motor.drive()
-        while not GPIO.input(self.drink_presentation_switch):
+        while GPIO.input(self.drink_presentation_switch):
             time.sleep(1)
         logger.info("presenting drink")
     
     def on_exit_presenting(self):
         self.set_global_direction(False)
         self.vertical_platter_motor.drive()
+        self.set_global_direction(True)

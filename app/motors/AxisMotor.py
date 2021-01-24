@@ -22,11 +22,11 @@ class AxisMotor:
 
     def any_stop_switches_hit(self):
 
-        # important that sleep happens first so that the motors have a chance to release
-        # the old switches
-        time.sleep(SLEEP_INTERVAL)
         for switch in self.stop_switches:
+            if switch == self.last_hit_switch:
+                continue
             if GPIO.input(switch):
+                self.last_hit_switch = switch
                 self.logger.debug(self.get_log_msg(f"Switch pin {switch} hit!"))
                 return True
         return False

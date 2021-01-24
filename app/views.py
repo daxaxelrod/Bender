@@ -20,8 +20,9 @@ def awaken(request):
 
 @api_view(["GET","POST"])
 def drinks(request):
-    if request.method == "POST":        
-        if drink_id := request.data.get("drink_id", None):
+    if request.method == "POST":
+        drink_id = request.data.get("drink_id", None)
+        if drink_id:
             drink = Drink.objects.get(id=drink_id)
             DrinkCreationRecord.objects.create(
                 drink=drink,
