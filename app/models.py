@@ -9,6 +9,9 @@ class Resevoir(models.Model):
             MinValueValidator(1)
         ])
     gpio_pin = models.IntegerField(unique=True)
+    
+    def __str__(self):
+        return f"Resevoir #{self.pk}"
 
 class Ingredient(models.Model):
     COST_CHOICES = [
@@ -40,14 +43,17 @@ class Instruction(models.Model):
     pour_duration = models.IntegerField(default=500, help_text="How long to fire the motor for. In ms")
     ingredient = models.ForeignKey(Ingredient, on_delete=models.CASCADE, related_name="instructions")
     order = models.PositiveIntegerField()
-    drink = models.ForeignKey(Drink, on_delete=models.CASCADE)
+    drink = models.ForeignKey(Drink, on_delete=models.CASCADE, related_name="instructions")
 
     class Meta:
         constraints = [
             models.UniqueConstraint(fields=["order", "drink"], name="unique instruction order")
-        ]    
+        ]
+        
+    def __str__(self):
+        return "Pour {self.ingredient} for {self.pour_duration / 1000} seconds"
 
 class DrinkCreationRecord(models.Model):
     drink = models.ForeignKey(Drink, on_delete=models.CASCADE)
-    created_at = models.DateField(auto_created=True)
+    created_at = models.DateTimeField(auto_now_add=True)
     source = models.CharField(max_length=120, help_text="Touchscreen, Text message")

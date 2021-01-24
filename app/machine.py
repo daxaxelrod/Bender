@@ -5,6 +5,7 @@ from .fsm import DrinkManufacturerFSM
 from transitions import Machine
 from app.models import Drink
 from transitions.extensions.states import add_state_features, Timeout
+from transitions.core import MachineError
 
 logger = logging.getLogger(__name__)
 
@@ -25,5 +26,8 @@ class DrinkManufacturer(object):
 
     def on_drink_selection(self, drink: Drink):
         self.drink_maker.prepare_drink(drink)
-        self.drink_maker.present()
-        self.drink_maker.reset()
+        try:
+            self.drink_maker.present()
+            self.drink_maker.reset()
+        except MachineError:
+            logger("machine couldnt transition to next state")
