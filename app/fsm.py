@@ -29,7 +29,7 @@ class DrinkManufacturerFSM(object):
         self.MOTOR_DIRECTION = value
 
     def __init__(self):
-        self.global_direction_pin = 2
+        self.global_direction_pin = 26
         GPIO.setmode(GPIO.BCM)
         GPIO.setup(self.global_direction_pin, GPIO.OUT)
         self.set_global_direction(True)
@@ -37,16 +37,15 @@ class DrinkManufacturerFSM(object):
 
         # initialize screw motors
         self.horizontal_patter_motor = AxisMotor(4, [14, 15])
-        self.shaker_motor = AxisMotor(4, [18, 23, 24])
+        self.shaker_motor = AxisMotor(17, [18, 24])
         self.vertical_platter_motor = AxisMotor(27, [25, 8])
 
         # pump motors are setup in execute pour
         # enabling them to be modified between runs
-        
-        
+                
 
         # setup miscellanious switches
-        self.drink_presentation_switch = 6
+        self.drink_presentation_switch = 13
 
 
     def on_enter_idle(self):
