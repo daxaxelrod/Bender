@@ -9,9 +9,6 @@ db.sqlite3
 # testing
 /app/templates/bender-ui/coverage
 
-# production
-/app/templates/bender-ui/build
-
 # misc
 .DS_Store
 .env.local
@@ -22,3 +19,4 @@ db.sqlite3
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+app/templates/bender-ui/.eslintcache
