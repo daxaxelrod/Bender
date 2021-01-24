@@ -102,19 +102,8 @@ class DrinkManufacturerFSM(object):
         for instruction in instructions:
             ingredient = instruction.ingredient
             pour_map[ingredient.resevoir.gpio_pin] = (instruction.pour_duration / 1000)
-        logger.info(pformat(pour_map))
-
+        logger.info(f"POUR MAP <pin: duration> {pformat(pour_map)}")
         self.execute_pour(pour_map)
-
-    def on_exit_preparing(self, drink: Drink):
-        #if drink.end_sound:
-        #    mixer.music.load(drink.end_sound)
-        #    mixer.music.play()
-        
-        # move the shaker back
-        self.set_global_direction(False)
-        self.shaker_motor.drive()
-        self.set_global_direction(True)
 
     POUR_SLEEP_TIME = 0.3
     def execute_pour(self, pour_map):
@@ -147,8 +136,19 @@ class DrinkManufacturerFSM(object):
                 logger.error(f"DRINK PIN LEFT ON: {err}")
                 GPIO.output(err, GPIO.LOW)
                 pass
+        time.sleep(2) # let pour settle
         logger.info("Pour complete!")
 
+
+    def on_exit_preparing(self, *args):
+        #if drink.end_sound:
+        #    mixer.music.load(drink.end_sound)
+        #    mixer.music.play()
+        
+        # move the shaker back
+        self.set_global_direction(False)
+        self.shaker_motor.drive()
+        self.set_global_direction(True)
 
     def is_pour_still_valid(self, pour_map, start_time, pin, timeout):
         return (any(time.time() < start_time + duration for pin, duration in pour_map.items()) or time.time() < start_time + timeout) 

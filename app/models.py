@@ -48,7 +48,10 @@ class Instruction(models.Model):
     class Meta:
         constraints = [
             models.UniqueConstraint(fields=["order", "drink"], name="unique instruction order")
-        ]    
+        ]
+        
+    def __str__(self):
+        return "Pour {self.ingredient} for {self.pour_duration / 1000} seconds"
 
 class DrinkCreationRecord(models.Model):
     drink = models.ForeignKey(Drink, on_delete=models.CASCADE)
