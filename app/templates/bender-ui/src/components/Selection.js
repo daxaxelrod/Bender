@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useHistory } from "react-router-dom";
+import DrinkCard from './DrinkCard';
 import { DOMAIN } from '../conf';
 
 export default function Selection() {
@@ -40,10 +41,10 @@ export default function Selection() {
             <h1>Make a selection</h1>
             {drinks.map((drink) => {
                 return (
-                    <div onClick={selectDrink}>
-                        <h3>{drink.name}</h3>
-                        <p>{drink.cost}</p>
-                    </div>
+                    <DrinkCard 
+                        drink={drink}
+                        onClick={drink => {}}
+                    />
                 )
             }
             )}
