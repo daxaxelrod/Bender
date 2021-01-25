@@ -57,3 +57,15 @@ class DrinkCreationRecord(models.Model):
     drink = models.ForeignKey(Drink, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     source = models.CharField(max_length=120, help_text="Touchscreen, Text message")
+
+class AxisMotor(models.Model):
+    """
+        Not used for actual state machine logic, used for a very crude panic reset via admin action
+        
+        If something gets out of whack, an admin can use an admin function to drive the motor until it hits a switch
+    """
+    name = models.CharField(max_length=64)
+    gpio_pin = models.IntegerField(unique=True)
+
+    def __str__(self):
+        return f"axis motor pin#{self.gpio_pin}"
