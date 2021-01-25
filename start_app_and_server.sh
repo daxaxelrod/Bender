@@ -4,12 +4,12 @@
 
 cd /home/pi/Documents/bender
 
-git pull
+# git pull
 
-pipenv install
+# pipenv install
 
 # could use gunicorn here but runserver better for debugging
-pipenv run python manage.py runserver --noreload &
+pipenv run python manage.py runserver 0.0.0.0:8000  --noreload &
 
 cd app/templates/bender-ui
 
