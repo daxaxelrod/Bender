@@ -27,15 +27,16 @@ export default function Selection() {
     }, [history, resourceUrl])
 
     const selectDrink = (drink) => {
+        let body = JSON.stringify({ drink_id: drink.id });
+        console.log("selected ", drink.id, "Passing", body)
         fetch(resourceUrl, {
+            method: "POST",
             headers: {
-                'Accept': 'application/json, text/plain, */*',
-                'Content-Type': 'application/json'
-            },        
-            method: 'POST',
-            body: JSON.stringify({
-                drink_id: drink.id
-            })
+                Accept: "application/json",
+                'Content-Type': "application/json",
+                'Access-Control-Allow-Origin': '*',//"http://localhost:8000",
+            },
+            body: body,
         }).then(function (response) {
             return response.json();
         }).then(function (data) {
@@ -53,14 +54,14 @@ export default function Selection() {
         <div className="container">
             <div className="box">
                 <h1 className="pageHeading">Select</h1>
-                {pending ? getPending(): null}
+                {pending ? getPending() : null}
                 <div className="columns is-multiline">
                     {drinks.map((drink) => {
                         return (
                             <DrinkCard
                                 key={drink.id}
                                 drink={drink}
-                                onClick={drink => selectDrink(drink)}
+                                onClick={() => selectDrink(drink)}
                             />
                         )
                     }

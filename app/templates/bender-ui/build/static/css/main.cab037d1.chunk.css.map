@@ -1,1 +1,0 @@
-{"version":3,"sources":["webpack://src/App.css"],"names":[],"mappings":"AAAA,KACE,cAAe,CACf,YAAa,CACb,qBAAsB,CACtB,UACF","file":"main.cab037d1.chunk.css","sourcesContent":[".btn {\r\n  cursor: pointer;\r\n  padding: 1rem;\r\n  background-color: blue;\r\n  color: white;\r\n}\r\n"]}
