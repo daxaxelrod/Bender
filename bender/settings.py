@@ -58,9 +58,12 @@ ROOT_URLCONF = 'bender.urls'
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
-    "http://localhost:3000",
+    "http://localhost:5000",
+    "http://localhost:8080",
     "http://10.0.0.4",
-    
+    "http://10.0.0.3",
+    "http://10.0.0.2",
+    "http://10.0.0.1",    
 ]
 
 
