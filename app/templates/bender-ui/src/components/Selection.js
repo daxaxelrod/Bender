@@ -6,17 +6,21 @@ import { DOMAIN } from '../conf';
 export default function Selection() {
 
     let [drinks, setDrinks] = useState([])
+    let [pending, setPending] = useState(false)
     const history = useHistory();
     let resourceUrl = DOMAIN + "/drinks/"
 
     useEffect(() => {
+        setPending(true)
         fetch(resourceUrl).then((response) => {
            return response.json() 
         }).then((data) => {
+            setPending(false);
             console.log("data from drinks api", data);
             setDrinks(data)
         }).catch((err) => {
-	    console.log("could not get drink selection! Aborting", err, err.response)
+        console.log("could not get drink selection! Aborting", err, err.response)
+        setPending(false)
 	    history.push("/")
 	})
     }, [history, resourceUrl])
@@ -37,17 +41,25 @@ export default function Selection() {
         
     }
     return (
-        <div>
-            <h1>Make a selection</h1>
+        <div className="container">
+            <div className="box">            
+            <h1 id="selectionHeading">Select</h1>
+            <div className="columns is-multiline">
+                {pending?  <progress class="progress is-large is-info" max="100">60%</progress>
+ : null}
             {drinks.map((drink) => {
                 return (
                     <DrinkCard 
+                        key={drink.id}
                         drink={drink}
                         onClick={drink => {}}
                     />
                 )
             }
             )}
+
+            </div>
+                        </div>
         </div>
     )
 }
