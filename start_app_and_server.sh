@@ -13,8 +13,8 @@ pipenv run python manage.py runserver --noreload &
 
 cd app/templates/bender-ui
 
-npm start &
+serve -s build &
 
 # add --kiosk to disable f11
-sudo -u pi chromium-browser --start-fullscreen http://localhost:3000 &
+sudo -u pi chromium-browser --start-fullscreen http://localhost:5000 &
 
