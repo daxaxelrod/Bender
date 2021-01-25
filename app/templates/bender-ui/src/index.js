@@ -4,6 +4,8 @@ import './App.css';
 import Welcome from './components/Welcome';
 import Selection from './components/Selection';
 import Enjoy from './components/Enjoy';
+import 'bulma/css/bulma.css'
+
 import {
   BrowserRouter as Router,
   Switch, Route } from "react-router-dom";

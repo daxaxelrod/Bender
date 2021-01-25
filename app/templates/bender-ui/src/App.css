@@ -1,6 +1,31 @@
-.btn {
-  cursor: pointer;
-  padding: 1rem;
-  background-color: blue;
-  color: white;
+
+@font-face {
+  font-family: 'Amatic SC';
+  src: local('Amatic SC'), url(./fonts/Amatic_SC/AmaticSC-Regular.ttf) format('truetype');
+}
+
+@font-face {
+  font-family: 'Julius Sans One';
+  src: local('Julius Sans One'), url(./fonts/Julius_Sans_One/JuliusSansOne-Regular.ttf) format('truetype');
+}
+
+@font-face {
+  font-family: 'Pinyon Script';
+  src: local('Pinyon Script'), url(./fonts/Pinyon_Script/PinyonScript-Regular.ttf) format('truetype');
+}
+
+
+.hero.has-background {
+  position: relative;
+  overflow: hidden;
+}
+.hero-background {
+  position: absolute;
+  object-fit: cover;
+  object-position: center center;
+  width: 100%;
+  height: 100%;
+}
+.hero-background.is-transparent {
+  opacity: 0.3;
 }
