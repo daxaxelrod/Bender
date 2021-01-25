@@ -4,7 +4,8 @@ import './App.css';
 import Welcome from './components/Welcome';
 import Selection from './components/Selection';
 import Enjoy from './components/Enjoy';
-import 'bulma/css/bulma.css'
+import 'bulma/css/bulma.css';
+import 'react-activity/dist/react-activity.css';
 import drink_1 from './stock_drink_1.jpeg'
 
 import {
@@ -21,13 +22,13 @@ ReactDOM.render(
 
         <Router>
           <Switch>
-            <Route path="/finished" exact>
+            <Route path="/enjoy" exact>
               <Enjoy />
             </Route>
             <Route path="/drinks" exact>
               <Selection />
             </Route>
-            <Route path="/" exact>
+            <Route path="/">
               <Welcome />
             </Route>
           </Switch>

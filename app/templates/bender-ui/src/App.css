@@ -74,12 +74,16 @@
   font-family: "Amatic SC";
 }
 
-.drink-option__description {
+.drink-option__description, .pending__subtext {
   font-size: 1.7rem;
   font-family: "Julius Sans One";
 }
 
-#selectionHeading {
+.pending__subtext {
+  text-align: center;
+}
+
+.pageHeading {
   font-size: 4rem;
   text-align: center;
   padding: 2rem 0;
@@ -90,4 +94,14 @@
   justify-content: center;
   align-items: center;
   display: flex;
+}
+
+.pending__container {
+  padding: 2.25rem;
+}
+
+.pending_spinner {
+  margin-bottom: 1rem;
+  display: flex;
+  justify-content: center;
 }

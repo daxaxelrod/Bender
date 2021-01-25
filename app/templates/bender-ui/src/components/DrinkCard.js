@@ -33,7 +33,7 @@ export default function DrinkCard({ onClick, drink }) {
             let part = Math.round(pourPortion / lowest_percentage)
             let result = `${part} part${part > 1 ? 's' : ''} ${instruction.ingredient.name}`
             let comma = drink.instructions.length - 1 === idx ? "" : ", "
-            return <p className="drink-option__description">{result + comma}</p>
+            return <p key={`instruction-${instruction.id}`} className="drink-option__description">{result + comma}</p>
         })
 
     }
