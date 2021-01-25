@@ -1,4 +1,8 @@
-export const DOMAIN = "http://10.0.0.4:8000"
 
-// on machine
-// export const DOMAIN = "http://localhost:8000"
+if (process.env.NODE_ENV !== "production") {  
+    env = true;
+} else {
+    env = false;
+}
+
+export const DOMAIN = env ? "http://10.0.0.4:8000" : "http://localhost:8000";
