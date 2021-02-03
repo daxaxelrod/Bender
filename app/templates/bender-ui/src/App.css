@@ -30,8 +30,12 @@
   opacity: 0.3;
 }
 
+.hero-body {
+    padding: 2rem 1.5rem !important;
+}
+
 .drink-option {
-  padding: 3rem 1.25rem !important;
+  padding: 1.9rem 1.25rem !important;
   cursor: pointer;
   position: relative;
   height: 100%;
@@ -69,7 +73,7 @@
 }
 
 .drink-option__name {
-  font-size: 5rem;
+  font-size: 3.4rem;
   letter-spacing: 6pt;
   font-family: "Amatic SC";
 }
@@ -84,9 +88,9 @@
 }
 
 .pageHeading {
-  font-size: 4rem;
+  font-size: 3rem;
   text-align: center;
-  padding: 2rem 0;
+  padding: .2rem 0;
   font-family: "Pinyon Script";
 }
 
@@ -104,4 +108,9 @@
   margin-bottom: 1rem;
   display: flex;
   justify-content: center;
+}
+
+.pageBtnContainer {
+    display: flex;
+    flex-direction: row;
 }

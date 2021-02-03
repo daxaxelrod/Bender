@@ -2,12 +2,15 @@ import React, { useEffect, useState } from 'react'
 import { useHistory } from "react-router-dom";
 import DrinkCard from './DrinkCard';
 import { DOMAIN } from '../conf';
-import Pending from './Pending'
+import Pending from './Pending';
+
+const NUMBER_PER_PAGE = 2;
 
 export default function Selection() {
 
     let [drinks, setDrinks] = useState([])
     let [pending, setPending] = useState(false)
+    let [pageNum, setPageNum] = useState(1);
 
     const history = useHistory();
     let resourceUrl = DOMAIN + "/drinks/"
@@ -35,7 +38,6 @@ export default function Selection() {
     
         return () => window.clearTimeout(timeoutID );
     }, []);
-    
 
     const selectDrink = (drink) => {
         let body = JSON.stringify({ drink_id: drink.id });
@@ -59,14 +61,33 @@ export default function Selection() {
     const getPending = () => {
         return <Pending />
     }
+    
+    const paginate = () => {
+        return drinks.slice((pageNum - 1) * NUMBER_PER_PAGE, NUMBER_PER_PAGE * pageNum);
+    }
+    
+    const goBack = () => {
+        let min = 0;
+        if (pageNum - 1 > min) {
+             setPageNum(pageNum - 1)
+        }
+    }
+    
+    const goForward = () => {
+        let max = Math.ceil(drinks.length / NUMBER_PER_PAGE)
+        if (pageNum + 1 <= max) {
+             setPageNum(pageNum + 1)
+        }
+    }
 
     return (
         <div className="container">
-            <div className="box">
-                <h1 className="pageHeading">Select</h1>
+            <div className="box" style={{
+                margin: 0
+            }}>
                 {pending ? getPending() : null}
                 <div className="columns is-multiline">
-                    {drinks.map((drink) => {
+                    {paginate(drinks).map((drink) => {
                         return (
                             <DrinkCard
                                 key={drink.id}
@@ -77,6 +98,16 @@ export default function Selection() {
                     }
                     )}
 
+                </div>
+                <div className="columns">
+                    <div className="column is-5"></div>
+                    <div className="column">
+                        <div className="columns is-justify-content-space-between">
+                            <div className="button is-dark p-4" onClick={goBack}>&#129048;</div>
+                            <div className="button is-dark p-4" onClick={goForward}>&#129050;</div>    
+                        </div>                        
+                    </div>
+                    <div className="column is-5"></div>
                 </div>
             </div>
         </div>

@@ -26,7 +26,7 @@ export default function DrinkCard({ onClick, drink }) {
                 lowest_percentage = part
             }
         }
-
+        
         return drink.instructions.map((instruction, idx) => {
             // i crack myself up
             let pourPortion = instruction.pour_duration / totalPour
@@ -54,9 +54,6 @@ export default function DrinkCard({ onClick, drink }) {
                 <div className="columns">
                     <div className="column">
                         {getPartsList()}
-                    </div>
-                    <div className="column drink-price">
-                        <p className="drink-option__description" >{"$".repeat(getAverageCost())}</p>
                     </div>
                 </div>
             </div>
