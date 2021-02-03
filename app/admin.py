@@ -25,7 +25,7 @@ class ResevoirAdmin(admin.ModelAdmin):
         return obj.level
     level.short_description = "Full %"
 
-    list_display = ["gpio_pin", level, percentage , capacity]
+    list_display = ["id", "gpio_pin", level, percentage , capacity]
 
     def get_c(self, obj):
         return obj.a + obj.b
