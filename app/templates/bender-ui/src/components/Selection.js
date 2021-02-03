@@ -8,6 +8,7 @@ export default function Selection() {
 
     let [drinks, setDrinks] = useState([])
     let [pending, setPending] = useState(false)
+
     const history = useHistory();
     let resourceUrl = DOMAIN + "/drinks/"
 
@@ -25,6 +26,16 @@ export default function Selection() {
             history.push("/")
         })
     }, [history, resourceUrl])
+
+
+    useEffect(() => {
+        const timeoutID = window.setTimeout(() => {
+            history.push("/")
+        }, 120000); // customize with value from server in the future
+    
+        return () => window.clearTimeout(timeoutID );
+    }, []);
+    
 
     const selectDrink = (drink) => {
         let body = JSON.stringify({ drink_id: drink.id });
