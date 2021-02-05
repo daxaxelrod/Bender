@@ -111,13 +111,15 @@ class DrinkManufacturerFSM(object):
 
     POUR_SLEEP_TIME = 0.3
     def execute_pour(self, pour_map):
+        # LOW is motor on, high is off
+        # due to how the relays work
 
         pins_switched_off = [] # verification that all pins were turned off
         start_time = time.time()
         # turn on all the pins, progressively turn them off based on the pour duration
         for pin in pour_map.keys():
             GPIO.setup(pin, GPIO.OUT)
-            GPIO.output(pin, GPIO.HIGH)
+            GPIO.output(pin, GPIO.LOW)
         
         timeout = 5
         while self.is_pour_still_valid(pour_map, start_time, pin, timeout):
@@ -126,7 +128,7 @@ class DrinkManufacturerFSM(object):
             now = time.time()
             for pin, duration in pour_map.items():
                 if now > start_time + duration:
-                    GPIO.output(pin, GPIO.LOW)
+                    GPIO.output(pin, GPIO.HIGH)
                     pins_switched_off.append(pin)
                     pass
         
@@ -138,7 +140,7 @@ class DrinkManufacturerFSM(object):
             left_on = (pins - off).elements()
             for err in left_on:
                 logger.error(f"DRINK PIN LEFT ON: {err}")
-                GPIO.output(err, GPIO.LOW)
+                GPIO.output(err, GPIO.HIGH)
                 pass
         time.sleep(2) # let pour settle
         logger.info("Pour complete!")
@@ -160,8 +162,6 @@ class DrinkManufacturerFSM(object):
     def on_enter_presenting(self):
         # drink is assumed complete
         self.vertical_platter_motor.drive()
-        #FIXME
-        import pdb; pdb.set_trace()
         while GPIO.input(self.drink_presentation_switch):
             time.sleep(1)
         logger.info("presenting drink")

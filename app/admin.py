@@ -1,5 +1,5 @@
 from django.contrib import admin
-
+import RPi.GPIO as GPIO
 from app.models import Ingredient, Resevoir, Instruction, Drink, DrinkCreationRecord, AxisMotor
 from app.views import machine 
 
@@ -29,6 +29,22 @@ class ResevoirAdmin(admin.ModelAdmin):
 
     def get_c(self, obj):
         return obj.a + obj.b
+
+
+    # all pins are setup in apps.py
+    def turn_on_resevoirs(modeladmin, request, queryset):
+        for res in queryset:
+            GPIO.output(res.gpio_pin, GPIO.LOW)
+
+    def turn_off_resevoirs(modeladmin, request, queryset):
+        for res in queryset:
+            GPIO.output(res.gpio_pin, GPIO.HIGH)
+
+
+
+    actions = [turn_on_resevoirs, turn_off_resevoirs]
+
+
 
 MOTOR_MAP = {
     6: machine.machine.model.horizontal_patter_motor,
