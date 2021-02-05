@@ -34,10 +34,12 @@ class ResevoirAdmin(admin.ModelAdmin):
     # all pins are setup in apps.py
     def turn_on_resevoirs(modeladmin, request, queryset):
         for res in queryset:
+            GPIO.setup(res.gpio_pin, GPIO.OUT)
             GPIO.output(res.gpio_pin, GPIO.LOW)
 
     def turn_off_resevoirs(modeladmin, request, queryset):
         for res in queryset:
+            GPIO.setup(res.gpio_pin, GPIO.OUT)
             GPIO.output(res.gpio_pin, GPIO.HIGH)
 
 

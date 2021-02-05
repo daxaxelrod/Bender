@@ -12,4 +12,4 @@ class Conf(AppConfig):
         resevoirs = Resevoir.objects.all()
         for res in resevoirs:
             GPIO.setup(res.gpio_pin, GPIO.OUT)
-            GPIO.output(res.gpio_pin, GPIO.HIGH)
+            GPIO.output(res.gpio_pin, GPIO.LOW)
