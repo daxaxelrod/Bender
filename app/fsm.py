@@ -41,7 +41,7 @@ class DrinkManufacturerFSM(object):
         
 
         # initialize screw motors
-        self.horizontal_patter_motor = AxisMotor(6, [14, 15])
+        self.horizontal_patter_motor = AxisMotor(23, [14, 15])
         self.shaker_motor = AxisMotor(17, [18, 24])
         self.vertical_platter_motor = AxisMotor(27, [25, 8])
 

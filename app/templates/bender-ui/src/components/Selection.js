@@ -10,6 +10,7 @@ export default function Selection() {
 
     let [drinks, setDrinks] = useState([])
     let [pending, setPending] = useState(false)
+    let [selectedDrink, setSelectedDrink] = useState(false)
     let [pageNum, setPageNum] = useState(1);
 
     const history = useHistory();
@@ -34,7 +35,7 @@ export default function Selection() {
     useEffect(() => {
         const timeoutID = window.setTimeout(() => {
             history.push("/")
-        }, 120000); // customize with value from server in the future
+        }, 160000); // customize with value from server in the future
     
         return () => window.clearTimeout(timeoutID );
     }, []);
@@ -42,6 +43,8 @@ export default function Selection() {
     const selectDrink = (drink) => {
         let body = JSON.stringify({ drink_id: drink.id });
         console.log("selected ", drink.id, "Passing", body)
+        setPending(true)
+        setSelectedDrink(true)
         fetch(resourceUrl, {
             method: "POST",
             headers: {
@@ -50,16 +53,24 @@ export default function Selection() {
             },
             body: body,
         }).then(function (response) {
+            setPending(false);
             return response.json();
         }).then(function (data) {
+            setPending(false);
             history.push("/enjoy");
         }).catch((err) => {
+           setPending(false);
             console.log('error starting drink', err, err.response);
         });
     }
 
     const getPending = () => {
-        return <Pending />
+        let message = "Loading Selection";
+        console.log("displaying pending")
+        if (selectedDrink) {
+            message = "Preparing your drink..."
+        }
+        return <Pending message={message}/>
     }
     
     const paginate = () => {
@@ -85,7 +96,8 @@ export default function Selection() {
             <div className="box" style={{
                 margin: 0
             }}>
-                {pending ? getPending() : null}
+                {pending ? getPending() : (
+                    <div>
                 <div className="columns is-multiline">
                     {paginate(drinks).map((drink) => {
                         return (
@@ -99,16 +111,18 @@ export default function Selection() {
                     )}
 
                 </div>
-                <div className="columns">
-                    <div className="column is-5"></div>
-                    <div className="column">
-                        <div className="columns is-justify-content-space-between">
-                            <div className="button is-dark p-4" onClick={goBack}>&#129048;</div>
-                            <div className="button is-dark p-4" onClick={goForward}>&#129050;</div>    
-                        </div>                        
+                    <div className="columns">
+                        <div className="column is-5"></div>
+                        <div className="column">
+                            <div className="columns is-justify-content-space-between">
+                                <div className="button is-dark p-4" onClick={goBack}>&#129048;</div>
+                                <div className="button is-dark p-4" onClick={goForward}>&#129050;</div>    
+                            </div>                        
+                        </div>
+                        <div className="column is-5"></div>
                     </div>
-                    <div className="column is-5"></div>
                 </div>
+                )}
             </div>
         </div>
     )

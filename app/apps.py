@@ -11,5 +11,6 @@ class Conf(AppConfig):
         GPIO.setmode(GPIO.BCM)
         resevoirs = Resevoir.objects.all()
         for res in resevoirs:
-            GPIO.setup(res.gpio_pin, GPIO.OUT)
-            GPIO.output(res.gpio_pin, GPIO.HIGH)
+            pass
+            #GPIO.setup(res.gpio_pin, GPIO.OUT)
+            #GPIO.output(res.gpio_pin, GPIO.HIGH)
