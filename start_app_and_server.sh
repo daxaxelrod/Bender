@@ -16,5 +16,5 @@ cd app/templates/bender-ui
 serve -s build &
 
 # add --kiosk to disable f11
-chromium-browser --start-fullscreen http://localhost:5000 &
+#chromium-browser --start-fullscreen http://localhost:5000 &
 

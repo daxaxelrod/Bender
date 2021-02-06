@@ -78,7 +78,7 @@ class DrinkManufacturerFSM(object):
             logger.info("Waiting for drink to be placed on the platter")
             time.sleep(1)
         
-        time.sleep(2)
+        time.sleep(.5)
         # playsounds "thank you"
         logger.info("Drink glass detected")
         return True

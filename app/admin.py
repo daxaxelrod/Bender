@@ -49,7 +49,7 @@ class ResevoirAdmin(admin.ModelAdmin):
 
 
 MOTOR_MAP = {
-    6: machine.machine.model.horizontal_patter_motor,
+    23: machine.machine.model.horizontal_patter_motor,
     17: machine.machine.model.shaker_motor,
     27: machine.machine.model.vertical_platter_motor
 }

@@ -10,7 +10,7 @@ class AxisMotor:
         self.signal_pin = pin_number
         self.logger = logging.getLogger(__name__)
         GPIO.setup(self.signal_pin, GPIO.OUT)
-        GPIO.output(self.signal_pin, GPIO.LOW)
+        GPIO.output(self.signal_pin, GPIO.HIGH)
         
         self.stop_switches = stop_switches # order matters
         for stop_switch in self.stop_switches:
@@ -33,19 +33,19 @@ class AxisMotor:
                 return True
         return False
 
-    def drive(self, timeout=20):
+    def drive(self, timeout=15):
         self.logger.debug(self.get_log_msg("running"))
         timeout = time.time() + timeout
         try:
-            GPIO.output(self.signal_pin, GPIO.HIGH)
+            GPIO.output(self.signal_pin, GPIO.LOW)
             while time.time() < timeout:
                 if self.any_stop_switches_hit():
                     break
-            GPIO.output(self.signal_pin, GPIO.LOW)
+            GPIO.output(self.signal_pin, GPIO.HIGH)
         except Exception as e:
             self.logger.error(self.get_log_msg("error driving motor"))
             self.logger.error(e, exc_info=True)
-            GPIO.output(self.signal_pin, GPIO.LOW)
+            GPIO.output(self.signal_pin, GPIO.HIGH)
         self.logger.debug(self.get_log_msg("Stoping!"))
         
 
