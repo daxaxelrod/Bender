@@ -69,6 +69,10 @@ class AxisMotorAdmin(admin.ModelAdmin):
         modeladmin.drive_motors_in_direction(False, queryset)
 
     actions = [drive_motor_forward, drive_motor_backwards]
+    list_display = ["__str__", "get_last_switch_hit"]
+
+    def get_last_switch_hit(self, obj):
+        return MOTOR_MAP[obj.gpio_pin].last_hit_switch
 
 # Register your models here.
 admin.site.register(Ingredient)

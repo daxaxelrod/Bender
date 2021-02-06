@@ -3,7 +3,7 @@ import argparse
 import time
 
 
-parser = argparse.ArgumentParse()
+parser = argparse.ArgumentParser()
 parser.add_argument("pin")
 args = parser.parse_args()
 
