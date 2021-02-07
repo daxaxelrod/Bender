@@ -12,11 +12,15 @@ class AxisMotor:
         GPIO.setup(self.signal_pin, GPIO.OUT)
         GPIO.output(self.signal_pin, GPIO.HIGH)
         
+        if len(stop_switches) == 0:
+            logger.error("Must provide one or more stop switches")
+            raise Exception();
+
         self.stop_switches = stop_switches # order matters
         for stop_switch in self.stop_switches:
             GPIO.setup(stop_switch, GPIO.IN)
         
-        self.last_hit_switch = -1
+        self.last_hit_switch = stop_switch[0]  
 
     def get_log_msg(self, msg):
         return f"GPIO-pin#{self.signal_pin} " + msg
@@ -35,10 +39,15 @@ class AxisMotor:
 
     def drive(self, timeout=15):
         self.logger.debug(self.get_log_msg(f"running with {timeout}s timout"))
-        timeout = time.time() + timeout
+        endtime = time.time() + timeout
         try:
             GPIO.output(self.signal_pin, GPIO.LOW)
-            while time.time() < timeout:
+            while time.time() < endtime:
+                # allow for limit switch to relieve itself if motor is resting on it
+                relieve_alotment = 1.5
+                if time.time() + timeout - relieve_alotment < endtime:
+                    continue
+
                 if self.any_stop_switches_hit():
                     break
             GPIO.output(self.signal_pin, GPIO.HIGH)
