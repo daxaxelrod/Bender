@@ -43,11 +43,6 @@ class AxisMotor:
         try:
             GPIO.output(self.signal_pin, GPIO.LOW)
             while time.time() < endtime:
-                # allow for limit switch to relieve itself if motor is resting on it
-                relieve_alotment = 1.5
-                if time.time() + timeout - relieve_alotment < endtime:
-                    continue
-
                 if self.any_stop_switches_hit():
                     break
             GPIO.output(self.signal_pin, GPIO.HIGH)
