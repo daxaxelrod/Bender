@@ -34,7 +34,7 @@ class AxisMotor:
         return False
 
     def drive(self, timeout=15):
-        self.logger.debug(self.get_log_msg("running"))
+        self.logger.debug(self.get_log_msg(f"running with {timeout}s timout"))
         timeout = time.time() + timeout
         try:
             GPIO.output(self.signal_pin, GPIO.LOW)

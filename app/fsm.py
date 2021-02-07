@@ -43,7 +43,7 @@ class DrinkManufacturerFSM(object):
         # initialize screw motors
         self.horizontal_patter_motor = AxisMotor(23, [14, 15])
         self.shaker_motor = AxisMotor(17, [18, 24])
-        self.vertical_platter_motor = AxisMotor(27, [25, 8])
+        self.vertical_platter_motor = AxisMotor(27, [1, 8])
 
         # pump motors are setup in execute pour
         # enabling them to be modified between runs
@@ -161,7 +161,7 @@ class DrinkManufacturerFSM(object):
 
     def on_enter_presenting(self):
         # drink is assumed complete
-        self.vertical_platter_motor.drive()
+        self.vertical_platter_motor.drive(timeout=30)
         while GPIO.input(self.drink_presentation_switch):
             time.sleep(1)
         logger.info("presenting drink")

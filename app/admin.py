@@ -60,7 +60,7 @@ class AxisMotorAdmin(admin.ModelAdmin):
         machine.machine.model.set_global_direction(direction)
         ids = [x.gpio_pin for x in queryset]
         for id in ids:
-            MOTOR_MAP[id].drive()
+            MOTOR_MAP[id].drive(25)
 
     def drive_motor_forward(modeladmin, request, queryset):
         modeladmin.drive_motors_in_direction(True, queryset)

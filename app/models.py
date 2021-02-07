@@ -68,4 +68,4 @@ class AxisMotor(models.Model):
     gpio_pin = models.IntegerField(unique=True)
 
     def __str__(self):
-        return f"axis motor pin#{self.gpio_pin}"
+        return f"{self.name} axis motor pin#{self.gpio_pin}"
