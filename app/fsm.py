@@ -24,6 +24,7 @@ class DrinkManufacturerFSM(object):
         # take a second to reverse polarity.
         # We dont want a motor acting as a genorator for a second due to inertial 
         time.sleep(1)
+        logger.info(f"Setting global direction switch to {value}")
         
         if value:
             pin_value = GPIO.HIGH
@@ -43,7 +44,7 @@ class DrinkManufacturerFSM(object):
         # initialize screw motors
         self.horizontal_patter_motor = AxisMotor(23, [14, 15])
         self.shaker_motor = AxisMotor(17, [18, 24])
-        self.vertical_platter_motor = AxisMotor(27, [1, 8])
+        self.vertical_platter_motor = AxisMotor(27, [3, 8])
 
         # pump motors are setup in execute pour
         # enabling them to be modified between runs
@@ -168,5 +169,5 @@ class DrinkManufacturerFSM(object):
     
     def on_exit_presenting(self):
         self.set_global_direction(False)
-        self.vertical_platter_motor.drive()
+        self.vertical_platter_motor.drive(timeout=30)
         self.set_global_direction(True)

@@ -20,7 +20,7 @@ class AxisMotor:
         for stop_switch in self.stop_switches:
             GPIO.setup(stop_switch, GPIO.IN)
         
-        self.last_hit_switch = stop_switch[0]  
+        self.last_hit_switch = stop_switches[0]  
 
     def get_log_msg(self, msg):
         return f"GPIO-pin#{self.signal_pin} " + msg
