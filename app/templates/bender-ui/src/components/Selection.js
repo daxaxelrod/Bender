@@ -115,8 +115,8 @@ export default function Selection() {
                         <div className="column is-5"></div>
                         <div className="column">
                             <div className="columns is-justify-content-space-between">
-                                <div className="button is-dark p-4" onClick={goBack}>&#129048;</div>
-                                <div className="button is-dark p-4" onClick={goForward}>&#129050;</div>    
+                                <div className="button is-dark p-4" onClick={goBack}>{"<"}</div>
+                                <div className="button is-dark p-4" onClick={goForward}>{">"}</div>    
                             </div>                        
                         </div>
                         <div className="column is-5"></div>
